@@ -5,7 +5,7 @@ import * as motion from "motion/react-client"
 import { FaStar, FaPlus, FaMinus } from "react-icons/fa";
 import { CiShare1 } from "react-icons/ci";
 import { IoCloseOutline } from "react-icons/io5";
-import { MdOutlineMail,  MdEmail } from "react-icons/md";
+import { MdOutlineMail, MdEmail } from "react-icons/md";
 import { CiFacebook } from "react-icons/ci";
 import { RiTwitterXFill } from "react-icons/ri";
 import { BiLogoWhatsappSquare } from "react-icons/bi";
@@ -45,7 +45,7 @@ function Cart() {
                     //Counting total price
                     const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
                     settotalPrice(totalAmount)
-                    
+
 
                 }
             }
@@ -69,7 +69,7 @@ function Cart() {
         showAllCartItems()
 
     }, [])
-   
+
 
     const updateOrAddItem = async (id, newQuantity, price, action) => {
         if (action === "increase") {
@@ -128,7 +128,7 @@ function Cart() {
                     toast.error("Please sign in to add to cart");
                     navigate("/signin")
                 }
-                            
+
             }
             catch (error) {
                 console.error("Error adding to cart: ", error);
@@ -206,14 +206,14 @@ function Cart() {
                     const updatedCart = cart.filter((item) => item.id !== product.id);
                     await updateDoc(userRef, { cart: updatedCart }, { merge: true });
                     setcartItems(updatedCart)
-                   
+
                     //Counting total items
                     const totalItems = updatedCart.reduce((acc, item) => acc + item.quantity, 0);
                     setsubTotalItems(totalItems)
                     //Counting total price
                     const totalAmount = updatedCart.reduce((acc, item) => acc + item.price * item.quantity, 0)
                     settotalPrice(totalAmount)
-                    
+
                     toast.success("Item deleted from cart");
                 }
             }
@@ -277,21 +277,21 @@ function Cart() {
             console.error("Failed to copy: ", err);
         }
     }
-    if(loading) return <CartSkeleton />
+    if (loading) return <CartSkeleton />
     //Checking if cart is empty or not
     if (cartItems.length == 0) return <motion.div initial={{ opacity: 0, scale: 0.5 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{
-        duration: 0.8,
-        delay: 0.5,
-        ease: [0, 0.71, 0.2, 1.01],
-    }} className='flex flex-col min-h-screen items-center justify-center'>
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+            duration: 0.8,
+            delay: 0.5,
+            ease: [0, 0.71, 0.2, 1.01],
+        }} className='flex flex-col min-h-screen items-center justify-center'>
         <h1 className='text-4xl my-6 font-bold'>Cart Items</h1>
-    <img src="https://cdn-icons-png.flaticon.com/512/107/107831.png" alt="empty wishlist" className='w-44 h-44' />
-    <h1 className='text-2xl font-bold'>Your Cart Page is Empty</h1>
-    <p className='text-gray-500'>Add items to your cart to see them here.</p>
-    <Link to={"/"} className='bg-yellow-400 px-4 py-2 rounded-full mt-4'>Browse Products</Link>
-</motion.div>
+        <img src="https://cdn-icons-png.flaticon.com/512/107/107831.png" alt="empty wishlist" className='w-44 h-44' />
+        <h1 className='text-2xl font-bold'>Your Cart Page is Empty</h1>
+        <p className='text-gray-500'>Add items to your cart to see them here.</p>
+        <Link to={"/"} className='bg-yellow-400 px-4 py-2 rounded-full mt-4'>Browse Products</Link>
+    </motion.div>
 
     return (
         <div className=" flex items-start flex-col justify-start px-4  w-full my-4 relative">
@@ -308,7 +308,7 @@ function Cart() {
                 }}
                 className="flex items-start  w-full flex-col justify-center"
             >
-                
+
                 {cartItems.map((product, index) => {
                     return <div key={index} className="p-8 flex md:flex-nowrap flex-wrap  relative  border-2  mb-16 rounded-3xl shadow-xl  w-full gap-8 " >
                         <img src={product.image} alt={product.title} className="h-48 mx-auto" />
@@ -352,8 +352,8 @@ function Cart() {
 
                         </div>
                         <p className="text-gray-600 font-bold">
-  ${!isNaN(product.price) ? Number(product.price).toFixed(2) : '0.00'}
-</p>
+                            ${!isNaN(product.price) ? Number(product.price).toFixed(2) : '0.00'}
+                        </p>
 
 
                         {/* share UI */}
@@ -367,46 +367,61 @@ function Cart() {
                                     <IoCloseOutline />
                                 </button>
 
-                                {/* Social Media Links */}
+                                {/* Social Media Share Links */}
                                 <div className="shareList flex gap-4 items-center justify-center">
                                     {/* Email Share */}
-                                    <Link
-                                        to={`mailto:?subject=Awesome Product&body=${encodeURIComponent(message)} ${encodeURIComponent(`https://e-commerce-db-f9711.web.app/product/${product.id}`)}`}
+                                    <a
+                                        href={`mailto:?subject=Check out this product: ${encodeURIComponent(product.name)}&body=${encodeURIComponent(
+                                            `${message}\n\n${product.description}\n\nView here: https://e-commerce-db-f9711.web.app/product/${product.id}`
+                                        )}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-4xl hover:text-gray-300 text-white"
+                                        aria-label="Share via Email"
+                                        className="text-4xl hover:text-gray-300 text-white transition-colors"
                                     >
                                         <MdEmail />
-                                    </Link>
-
+                                    </a>
 
                                     {/* Facebook Share */}
-                                    <Link
-                                        to={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://e-commerce-db-f9711.web.app/product/${product.id}`)}`}
+                                    <a
+                                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                                            `https://e-commerce-db-f9711.web.app/product/${product.id}`
+                                        )}`}
                                         target="_blank"
-                                        className="text-4xl hover:text-gray-300 text-white"
+                                        rel="noopener noreferrer"
+                                        aria-label="Share on Facebook"
+                                        className="text-4xl hover:text-gray-300 text-white transition-colors"
                                     >
                                         <CiFacebook />
-                                    </Link>
+                                    </a>
 
                                     {/* Twitter (X) Share */}
-                                    <Link
-                                        to={`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(`https://e-commerce-db-f9711.web.app/product/${product.id}`)}`}
+                                    <a
+                                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                                            `${message} - ${product.name}`
+                                        )}&url=${encodeURIComponent(
+                                            `https://e-commerce-db-f9711.web.app/product/${product.id}`
+                                        )}`}
                                         target="_blank"
-                                        className="text-4xl hover:text-gray-300 text-white"
+                                        rel="noopener noreferrer"
+                                        aria-label="Share on Twitter"
+                                        className="text-4xl hover:text-gray-300 text-white transition-colors"
                                     >
                                         <RiTwitterXFill />
-                                    </Link>
+                                    </a>
 
                                     {/* WhatsApp Share */}
-                                    <Link
-                                        to={`https://wa.me/?text=${encodeURIComponent(`${message} ${`https://e-commerce-db-f9711.web.app/product/${product.id}`}`)}`}
+                                    <a
+                                        href={`https://wa.me/?text=${encodeURIComponent(
+                                            `${message}\n\n${product.name}\n\n${`https://e-commerce-db-f9711.web.app/product/${product.id}`}`
+                                        )}`}
                                         target="_blank"
-                                        className="text-4xl hover:text-gray-300 text-white"
+                                        rel="noopener noreferrer"
+                                        aria-label="Share on WhatsApp"
+                                        className="text-4xl hover:text-gray-300 text-white transition-colors"
                                     >
                                         <BiLogoWhatsappSquare />
-                                    </Link>
-
+                                    </a>
                                 </div>
 
                                 {/* Copy URL Section */}
