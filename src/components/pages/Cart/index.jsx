@@ -426,10 +426,10 @@ function Cart() {
 
                                 {/* Copy URL Section */}
                                 <div className="url flex flex-wrap gap-2 items-center text-white">
-                                    {`http://localhost:5173/product/${product.id}`}
+                                    {`https://e-commerce-db-f9711.web.app/product/${product.id}`}
                                     <div className="copyurl flex gap-2 text-white border py-1 rounded-sm items-center w-fit px-2 relative">
                                         <span className='font-bold'>Copy</span>
-                                        <button className="cursor-pointer text-white" onClick={() => { copyText(`http://localhost:5173/product/${product.id}`) }}><MdOutlineCopyAll /> </button>
+                                        <button className="cursor-pointer text-white" onClick={() => { copyText(`https://e-commerce-db-f9711.web.app/product/${product.id}`) }}><MdOutlineCopyAll /> </button>
                                         {copied && (
                                             <span
                                                 className={`absolute top-[40px] left-[100px] bg-gray-800 text-white text-sm px-2 py-1 rounded-md transition-opacity duration-500 ${copied ? "opacity-100 scale-100" : "opacity-0 scale-90"
