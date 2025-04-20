@@ -19,16 +19,22 @@ const Reviews = ({ product }) => {
   const [rating, setRating] = useState(0);
   const [userReviews, setuserReviews] = useState([])
   const navigate = useNavigate();
-  const [refreshReviews, setRefreshReviews] = useState(false);
-
+  const [refreshReviews, setRefreshReviews] = useState(true);
+  const [isUserSelectedRating, setisUserSelectedRating] = useState(true)
 
 
 
   const addReview = async () => {
-    if (newReview.trim() === "" || rating === 0) return;
+    if (newReview.trim() === "" || rating === 0) 
+      {
+        setisUserSelectedRating(false)
+        return;
+      }
+     
 
     try {
       setLoading(true)
+      setisUserSelectedRating(true)
       if (user) {
         const reviewRef = doc(db, "products", String(product.id), "reviews", user.uid);
         const reviewSnap = await getDoc(reviewRef);
@@ -98,7 +104,15 @@ const Reviews = ({ product }) => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+   if(rating > 0 && rating <= 5)
+   {
+    setisUserSelectedRating(true)
+   }
+    // else{
+    //   setisUserSelectedRating(true)
+    // }
+  }, [rating])
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -150,6 +164,7 @@ const Reviews = ({ product }) => {
           />
         ))}
       </div>
+      {!isUserSelectedRating && <p className="text-sm text-gray-500">Please select a rating</p>}
       {userReviews?.length > 0 ?
 
         (<>

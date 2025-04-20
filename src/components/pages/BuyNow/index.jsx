@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { db, auth } from "../../../firebase";
-import { getDoc, updateDoc,doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getDoc, updateDoc, doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -52,7 +52,7 @@ const BuyNow = () => {
         const cartData = cartSnap.data();
         const cartItems = cartData.cart || [];
 
-        const updatedCartItems = cartItems.filter(item => Number(item.id) !== Number(product.id)); 
+        const updatedCartItems = cartItems.filter(item => Number(item.id) !== Number(product.id));
 
         await updateDoc(cartRef, {
           cart: updatedCartItems,
@@ -87,7 +87,7 @@ const BuyNow = () => {
             const isAlreadyInCart = cartList.some((item) => Number(item.id) === Number(id));
             //checking if the item is already in cart
             if (isAlreadyInCart) {
-              const cartItem = cartList.find((item) => Number(item.id) === Number(id));       
+              const cartItem = cartList.find((item) => Number(item.id) === Number(id));
               setProduct(cartItem);
               setQuantity(cartItem.quantity);
               setValue("quantity", cartItem.quantity || 1);
@@ -97,7 +97,7 @@ const BuyNow = () => {
               fetch(`https://fakestoreapi.com/products/${id}`)
                 .then((res) => res.json())
                 .then((data) => setProduct(data));
-              setValue("quantity",  1);
+              setValue("quantity", 1);
             }
           }
         }
@@ -108,20 +108,20 @@ const BuyNow = () => {
     }
     fetchProductInCart();
   }, [user, id]);
- 
+
   return (
     <div className="max-w-2xl mx-auto min-h-screen flex flex-col items-center justify-center gap-10 p-4 mt-10 bg-white rounded-2xl shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Buy Now</h2>
 
       {loading ? <MiniProductSkeleton /> : (
-  <div className="flex gap-4 items-center border-b pb-4">
-    <img src={product?.image} alt={product?.title} className="w-24 max-h-fit object-cover rounded" />
-    <div>
-      <h3 className="text-lg font-semibold">{product.title || "unknown"}</h3>
-      <p className="text-red-600 font-bold text-xl">₹{product?.price || 0}</p>
-    </div>
-  </div>
-)}
+        <div className="flex gap-4 items-center border-b pb-4">
+          <img src={product?.image} alt={product?.title} className="w-24 max-h-fit object-cover rounded" />
+          <div>
+            <h3 className="text-lg font-semibold">{product.title || "unknown"}</h3>
+            <p className="text-red-600 font-bold text-xl">₹{product?.price || 0}</p>
+          </div>
+        </div>
+      )}
 
       {/* Order Details */}
       <motion.div initial={{ opacity: 0, scale: 0.5 }}
@@ -130,7 +130,7 @@ const BuyNow = () => {
           duration: 0.8,
           delay: 0.5,
           ease: [0, 0.71, 0.2, 1.01],
-        }} className="p-8 bg-white border-2 my-2 rounded-2xl shadow-2xl w-[80%] mx-auto  flex flex-col gap-4">
+        }} className="sm:p-8 p-4 bg-white border-2 my-2 rounded-2xl shadow-2xl sm:w-[80%] w-[100%] mx-auto  flex flex-col gap-4">
         {loading && <Loader />}
         <h2 className="text-2xl font-bold mb-6 text-center ">Order Details</h2>
 

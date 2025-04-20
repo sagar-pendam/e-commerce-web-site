@@ -1,6 +1,6 @@
 import Home from "./components/pages/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, createContext, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route,useLocation } from "react-router-dom";
+import { useState, createContext, useEffect,useRef } from "react";
 import ProductInfo from "./components/pages/ProductInfo";
 import NotFound from "./components/pages/NotFound";
 import Navbar from "./components/common/Navbar";
@@ -21,6 +21,7 @@ import Conditions from "./components/pages/Conditions";
 import Privacy from "./components/pages/Privacy";
 import {auth} from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import NavigationAwareScroll from "./components/common/NavigationAwareScroll";
 const App = () => {
   const [cartItems, setcartItems] = useState([])// To cart items
   const [totalPrice, settotalPrice] = useState()//Total Price
@@ -34,6 +35,8 @@ const App = () => {
   const [user, setuser] = useState(null)
   const [priceApplied, setpriceApplied] = useState(false)
   const [authLoading, setAuthLoading] = useState(true);
+  
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setuser(currentUser);
@@ -68,6 +71,7 @@ const App = () => {
 
       <Router>
         <Navbar />
+        <NavigationAwareScroll />
         <ToastContainer
           position="top-right"
           autoClose={2000}
