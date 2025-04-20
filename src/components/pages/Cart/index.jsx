@@ -371,7 +371,7 @@ function Cart() {
                                 <div className="shareList flex gap-4 items-center justify-center">
                                     {/* Email Share */}
                                     <Link
-                                        to={`mailto:?subject=Awesome Product&body=${encodeURIComponent(message)} ${encodeURIComponent(`http://localhost:5173/product/${product.id}`)}`}
+                                        to={`mailto:?subject=Awesome Product&body=${encodeURIComponent(message)} ${encodeURIComponent(`https://e-commerce-db-f9711.web.app/product/${product.id}`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-4xl hover:text-gray-300 text-white"
@@ -382,7 +382,7 @@ function Cart() {
 
                                     {/* Facebook Share */}
                                     <Link
-                                        to={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`http://localhost:5173/product/${product.id}`)}`}
+                                        to={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://e-commerce-db-f9711.web.app/product/${product.id}`)}`}
                                         target="_blank"
                                         className="text-4xl hover:text-gray-300 text-white"
                                     >
@@ -391,7 +391,7 @@ function Cart() {
 
                                     {/* Twitter (X) Share */}
                                     <Link
-                                        to={`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(`http://localhost:5173/product/${product.id}`)}`}
+                                        to={`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(`https://e-commerce-db-f9711.web.app/product/${product.id}`)}`}
                                         target="_blank"
                                         className="text-4xl hover:text-gray-300 text-white"
                                     >
@@ -400,7 +400,7 @@ function Cart() {
 
                                     {/* WhatsApp Share */}
                                     <Link
-                                        to={`https://wa.me/?text=${encodeURIComponent(`${message} ${`http://localhost:5173/product/${product.id}`}`)}`}
+                                        to={`https://wa.me/?text=${encodeURIComponent(`${message} ${`https://e-commerce-db-f9711.web.app/product/${product.id}`}`)}`}
                                         target="_blank"
                                         className="text-4xl hover:text-gray-300 text-white"
                                     >
