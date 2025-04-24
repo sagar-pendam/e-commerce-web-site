@@ -1,5 +1,5 @@
 import { useEffect, useState,useContext } from "react";
-import { useParams, NavLink } from "react-router-dom";
+import { useParams, NavLink,useNavigate } from "react-router-dom";
 import * as motion from "motion/react-client"
 import SkeletonLoader from "../../skeletons/SkeletonLoader";
 import CircleLoader from "../../common/CircleLoader";
@@ -17,11 +17,12 @@ function ProductInfo() {
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
     const [product, setProduct] = useState(null);
-
+    const navigate = useNavigate();
     useEffect(() => {
         fetch(`https://fakestoreapi.com/products/${id}`)
             .then((res) => res.json())
-            .then((data) => setProduct(data));
+            .then((data) => {setProduct(data)
+            setLoading(false)});
     }, [id]);
 
     //Adding cart 

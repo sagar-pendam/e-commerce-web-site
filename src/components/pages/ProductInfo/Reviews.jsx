@@ -4,11 +4,12 @@ import { FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { toast, Bounce } from "react-toastify";
 import CartContext from "../../../context/CartContext";
-import { db } from "../../../firebase";
+import { db ,auth} from "../../../firebase";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, addDoc, getDoc, doc, updateDoc, arrayUnion, setDoc, serverTimestamp } from "firebase/firestore";
 const Reviews = ({ product }) => {
-  const { user } = useContext(CartContext);
+  const { user,setuser } = useContext(CartContext);
   const [loading, setLoading] = useState(false);
   const [reviews, setReviews] = useState([
     { id: 1, username: "John", text: "Great product! Highly recommend. 👍", rating: 5 },
@@ -113,22 +114,39 @@ const Reviews = ({ product }) => {
     //   setisUserSelectedRating(true)
     // }
   }, [rating])
+
+ 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const reviewsRef = collection(db, "products", String(product.id), "reviews");
-        const reviewSnap = await getDocs(reviewsRef);
-        const allReviews = reviewSnap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));      
-        setuserReviews(allReviews);       
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setuser(currentUser);
+  
+      if (!currentUser) {
+        toast.error("Please sign in to write a review");
+        navigate("/signin");
+        return;
       }
-    };
-    fetchReviews();
-  }, [product.id, refreshReviews]);
+  
+      const fetchReviews = async () => {
+        try {
+          const reviewsRef = collection(db, "products", String(product.id), "reviews");
+          const reviewSnap = await getDocs(reviewsRef);
+          const allReviews = reviewSnap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setuserReviews(allReviews);
+        } catch (error) {
+          console.error("Error fetching reviews:", error);
+          toast.error("Error loading reviews.");
+        }
+      };
+  
+      fetchReviews();
+    });
+  
+    return () => unsubscribe(); // cleanup the listener
+  }, [product.id, refreshReviews, navigate]);
+  
   return (
     <div className="reviewsBox w-full mx-auto py-4 px-2">
       {/* Add Review Input & Button */}
@@ -197,7 +215,7 @@ const Reviews = ({ product }) => {
                       />
                     ))}
                   </div>
-                  <p className="text-gray-500 text-wrap">Reviewed On {review.createdAt?.toDate().toLocaleDateString()}</p>
+                  <p className="text-gray-500 text-wrap">Reviewed On {review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString() : "Just now"}</p>
                   <p className="text-black text-wrap">{review.text}</p>
                 </motion.div>
               ))
