@@ -28,7 +28,14 @@ const Reviews = ({ product }) => {
   const addReview = async () => {
     if (newReview.trim() === "" || rating === 0) 
       {
-        setisUserSelectedRating(false)
+        if(rating === 0){
+          setisUserSelectedRating(false)
+        }
+        if(newReview.trim() === "") {
+          toast.error("Please write a review")
+        }
+        
+        
         return;
       }
      
