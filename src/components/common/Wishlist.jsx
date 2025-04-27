@@ -1,4 +1,4 @@
-import React,{useState,useContext,useEffect} from 'react'
+import React,{useState,useContext,useEffect , memo} from 'react'
 import { Heart } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { db,auth } from "../../firebase";
@@ -81,4 +81,4 @@ function Wishlist({product,removeFromWishlist}) {
     )
 }
 
-export default Wishlist
+export default memo(Wishlist);

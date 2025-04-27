@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate  } from "react-router-dom";
 import { motion } from "framer-motion";
 import SkeletonLoader from "../../skeletons/SkeletonLoader"; // Import Skeleton Loader
 import { FaStar } from "react-icons/fa";
@@ -15,6 +15,7 @@ import CircleLoader from "../../common/CircleLoader";
 const Home = () => {
   const { user, setuser, cartItems, setcartItems, quantityOfItems, setquantityOfItems, products, setProducts } = useContext(CartContext)
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => { // Simulate delay for skeleton effect
@@ -109,7 +110,8 @@ const Home = () => {
           ))}
         </div>
       ) : (
-        <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        products.length > 0 ? (
+          <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product, index) => (
             <motion.div
               key={product.id}
@@ -167,6 +169,11 @@ const Home = () => {
             </motion.div>
           ))}
         </div>
+        ):
+        <div className="flex justify-center items-center h-96">
+        <h2 className="text-xl font-semibold text-gray-500">No Products Found</h2>
+      </div>
+      
       )}
     </div>
   );

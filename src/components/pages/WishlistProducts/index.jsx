@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext ,useCallback} from 'react'
 import CartContext from '../../../context/CartContext'
 import { collection, addDoc, getDoc, doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
@@ -92,10 +92,10 @@ function WishlistProducts() {
     }
   }
     //Removing from wishlist
-    const removeFromWishlist = async (id) => {
-      setwishlistProductsList(wishlistProductsList.filter((item) => item.id !== id))
-      
-    }
+    const removeFromWishlist = useCallback(async (id) => {
+      setwishlistProductsList(prevList => prevList.filter(item => item.id !== id));
+    }, []);
+    
     return (
         <div>
             <div className='flex min-h-screen flex-col items-center justify-center'>

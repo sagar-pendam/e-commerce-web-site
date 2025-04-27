@@ -4,24 +4,21 @@ import { Link } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi"; // Import icons
 import CartContext from '../../context/CartContext';
 import { IoFilterOutline } from "react-icons/io5";
-function Filter() {
+function Filter({categorySelected}) {
   const { priceApplied, setpriceApplied, minPrice, setminPrice, maxPrice, setmaxPrice, priceRange, setPriceRange, category, setcategory, products, setProducts, originalPriceRange, setoriginalPriceRange } = useContext(CartContext)
   const [isFilterOpen, setisFilterOpen] = useState(false)
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [originalProducts, setorignalProducts] = useState([])
   
 
-  const handleFilter = () => {
-    setProducts(products.filter((item) => ((item.price >= priceRange) && (item.price <= maxPrice))));    
-    setpriceApplied(!priceApplied)    
-  };
+  
 
   const handleCheckboxChange = (category) => {
+    
     setSelectedCategories((prev) =>
-      prev.includes(category) ? prev.filter((item) => item !== category) : [...prev, category]
+      prev.includes(category) ? prev.filter((item) => item !== category  ) : [...prev, category]
 
     );   
-
   };
   //Filter button handler
   const showFilter = (value) => {
@@ -30,14 +27,7 @@ function Filter() {
   }
 
 
-  useEffect(() => {
-    if (selectedCategories.length === 0) {
-      setProducts(originalProducts); // Reset to all products if no categories are selected
-    } else {
-      setProducts(originalProducts.filter((item) => selectedCategories.includes(item.category)));
-    }
-  }, [selectedCategories, originalProducts]);
-
+  
   // Fetch products from API
   useEffect(() => {
 
@@ -64,6 +54,26 @@ function Filter() {
 
 
   }, []);
+
+  useEffect(() => {
+    setProducts(originalProducts.filter((item) => {
+      
+      if(selectedCategories.length === 0) {
+        return item.price >= priceRange && item.price <= maxPrice; 
+      }
+      const isCategoryMatch =selectedCategories.includes(item.category);
+      const isPriceMatch = item.price >= priceRange && item.price <= maxPrice;
+      return isCategoryMatch && isPriceMatch;
+    }))
+  }, [selectedCategories, originalProducts, priceRange, maxPrice, categorySelected]);
+
+  // Set the selected categories based on the categorySelected prop
+  // This will be called when the component mounts or when categorySelected changes
+  useEffect(() => {
+   if(categorySelected){
+    setSelectedCategories([categorySelected])
+    }
+  }, [categorySelected])
   return (
     <nav className='flex  md:gap-4 px-4  bg-slate-700 py-4 relative '>
       {/* Filter button */}
@@ -120,12 +130,6 @@ function Filter() {
             className="w-full cursor-pointer accent-blue-600"
           />
 
-          <button
-            onClick={handleFilter}
-            className={isFilterOpen ? "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" : "w-0"}
-          >
-            Apply Filter
-          </button>
         </div>
 
       </nav>
